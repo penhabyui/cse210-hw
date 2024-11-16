@@ -64,35 +64,31 @@ class Program
         }
     }
 
-    static void LoadJournalFromFile()
+        static void LoadJournalFromFile()
     {
         Console.Write("Enter the filename to load the journal: ");
         string filename = Console.ReadLine();
+        
+        entries.Clear();
+        string[] lines = File.ReadAllLines(filename);
 
-        if (File.Exists(filename))
+        foreach (string line in lines)
         {
-            entries.Clear();
-            foreach (var line in File.ReadLines(filename))
+            string[] parts = line.Split(',');
+            if (parts.Length == 3)
             {
-                string[] parts = line.Split(',');
-                if (parts.Length == 3)
+                entries.Add(new Entry
                 {
-                    Entry entry = new Entry
-                    {
-                        Date = DateTime.Parse(parts[0]),
-                        Prompt = parts[1],
-                        Response = parts[2]
-                    };
-                    entries.Add(entry);
-                }
+                    Date = DateTime.Parse(parts[0]),
+                    Prompt = parts[1],
+                    Response = parts[2]
+                });
             }
-            Console.WriteLine("Journal loaded successfully.");
         }
-        else
-        {
-            Console.WriteLine("File not found.");
-        }
+
+        Console.WriteLine("Journal loaded successfully.");
     }
+
 
     static void SaveJournalToFile()
     {
